@@ -3,25 +3,32 @@ import { loginRequest, registerRequest } from "@/services/auth";
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
-    token: localStorage.getItem("token") || null,
+    token: localStorage.getItem("access_token") || null,
     user: JSON.parse(localStorage.getItem("user")) || null,
   }),
+
+  getters: {
+    isLoggedIn: (state) => !!state.token,
+  },
 
   actions: {
     async login(email, password) {
       try {
         const res = await loginRequest(email, password);
 
-        this.token = res.data.token;
+        this.token = res.data.access_token;
         this.user = res.data.user;
 
-        // simpan ke localStorage
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("access_token", res.data.access_token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
 
-        return res.data;
+        return { success: true };
       } catch (error) {
-        throw error.response?.data || { message: "Login failed" };
+        const err = error.response?.data;
+        throw {
+          success: false,
+          message: err?.message || "Login gagal",
+        };
       }
     },
 
@@ -34,16 +41,26 @@ export const useAuthStore = defineStore("authStore", {
           password_confirmation
         );
 
-        return res.data;
+        return {
+          success: true,
+          data: res.data,
+        };
       } catch (error) {
-        throw error.response?.data || { message: "Register failed" };
+        const err = error.response?.data;
+
+        throw {
+          success: false,
+          message: err?.message || err?.error || "Register gagal",
+          errors: err?.errors || null,
+        };
       }
     },
 
     logout() {
       this.token = null;
       this.user = null;
-      localStorage.removeItem("token");
+
+      localStorage.removeItem("access_token");
       localStorage.removeItem("user");
     },
   },

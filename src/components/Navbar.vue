@@ -1,10 +1,3 @@
-<script setup>
-const navLinks = [
-  { name: "Dashboard", path: "/" },
-  { name: "Books", path: "/books" },
-  { name: "Borrow", path: "/borrow" },
-];
-</script>
 
 <template>
   <nav class="text-xl flex justify-between py-6 px-10 text-white">
@@ -22,3 +15,12 @@ const navLinks = [
     </div>
   </nav>
 </template>
+
+<script setup>
+const navLinks = [
+  { name: "Dashboard", path: "/" },
+  { name: "Books", path: "/books" },
+  { name: "Profile", path: "/profile" },
+  { name: "login", path: "/login" },
+];
+</script>

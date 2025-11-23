@@ -24,11 +24,14 @@ onMounted(async () => {
     </div>
 
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <BookCard
-        v-for="book in books"
-        :key="book.id"
-        :book="book"
-      />
+       <RouterLink
+          v-for="book in books"
+          :key="book.id"
+          :to="`/books/${book.id}`"
+          class="block hover:scale-105 transition-transform"
+        >
+          <BookCard :book="book" />
+        </RouterLink>
     </div>
   </div>
 </template>

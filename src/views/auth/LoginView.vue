@@ -3,6 +3,7 @@ import { RouterLink, useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 
+
 const router = useRouter();
 const auth = useAuthStore();
 
@@ -10,6 +11,9 @@ const auth = useAuthStore();
 const email = ref("");
 const password = ref("");
 
+if (auth.isLoggedIn) {
+  router.push("/profile");
+}
 // submit login
 const submitLogin = async () => {
   try {
