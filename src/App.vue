@@ -4,8 +4,7 @@ import Navbar from './components/Navbar.vue';
 </script>
 
 <template>
-  <div class="bg-linear-to-br from-blue-600 to-indigo-900">
-
+  <div class=" min-h-screen bg-linear-to-br from-blue-600 to-indigo-900">
     <header>
       <Navbar />
     </header>

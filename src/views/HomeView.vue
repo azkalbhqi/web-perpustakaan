@@ -4,6 +4,9 @@ import { useAuthStore } from "@/stores/authStore";
 import { useBooksStore } from "@/stores/booksStore";
 import { useUserBookStore } from "@/stores/userBookStore";
 import BorrowedTable from "@/components/BorrowedTable.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const auth = useAuthStore();
 const booksStore = useBooksStore();
@@ -15,6 +18,11 @@ const history = ref([]);
 const overdue = ref([]);
 const borrowed = ref([]);
 
+//checker
+if (!auth.isLoggedIn) {
+  router.push("/login");
+}
+
 // LOAD DATA
 onMounted(async () => {
   const token = auth.token;
@@ -22,10 +30,6 @@ onMounted(async () => {
   // Load total buku
   await booksStore.fetchBooks();
   totalBooks.value = booksStore.count;
-
-  // Load history dari userBookStore
-  await userBookStore.fetchBorrowHistory(token);
-  history.value = userBookStore.history;
 
   // Load borrowed books
   await userBookStore.fetchMyBorrowed(token);
@@ -59,7 +63,7 @@ onMounted(async () => {
       <!-- History Count -->
       <div class="p-6 bg-white shadow rounded-xl border border-gray-200">
         <p class="text-gray-500">Total Riwayat Peminjaman</p>
-        <h2 class="text-4xl font-bold text-blue-600">{{ history.length }}</h2>
+        <h2 class="text-4xl font-bold text-blue-600">{{ borrowed.length }}</h2>
       </div>
 
       <!-- Overdue Count -->

@@ -16,22 +16,40 @@ export const useUserBookStore = defineStore("userBookStore", () => {
 
 
   // === BORROW A BOOK ===
-  const borrowBook = async (data) => {
+  const borrowBook = async (bookId) => {
     try {
-      const res = await UserBookService.borrowBook(auth.token, data);
-      await fetchUserBooks(); // Refresh list user books
-      await fetchBorrowHistory(); // Refresh history
-      return { success: true, data: res.data };
+      const payload = {
+        "book_id": bookId,  
+      };
+  
+      const res = await UserBookService.borrowBook(auth.token, payload);
+  
+      // Refresh list setelah berhasil
+      await fetchUserBooks();
+      await fetchBorrowHistory();
+  
+      return {
+        success: true,
+        data: res.data,
+      };
     } catch (err) {
       console.error("Borrow failed:", err);
-      return { success: false, message: err.response?.data?.message || "Failed to borrow book" };
+  
+      return {
+        success: false,
+        message: err.response?.data?.message || "Failed to borrow book",
+      };
     }
   };
+  
 
   // === RETURN BOOK ===
-  const returnBook = async (data) => {
+  const returnBook = async (borrow_id) => {
     try {
-      const res = await UserBookService.returnBook(auth.token, data);
+      const payload = {
+        "borrowing_id": borrow_id,
+      };
+      const res = await UserBookService.returnBook(auth.token, payload);
       await fetchUserBooks();
       await fetchBorrowHistory();
       await fetchOverdue();
@@ -49,7 +67,8 @@ export const useUserBookStore = defineStore("userBookStore", () => {
 
     try {
       const res = await UserBookService.myHistory(auth.token);
-      history.value = res.data.data;
+      history.value = res.data;
+      console.log(res.data);
     } catch (err) {
       error.value = "Failed to load borrow history";
       console.error(err);

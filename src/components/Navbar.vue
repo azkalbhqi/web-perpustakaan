@@ -20,6 +20,7 @@
 const navLinks = [
   { name: "Dashboard", path: "/" },
   { name: "Books", path: "/books" },
+  { name: "History", path: "/history" },
   { name: "Profile", path: "/profile" },
   { name: "login", path: "/login" },
 ];

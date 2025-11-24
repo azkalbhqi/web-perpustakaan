@@ -20,7 +20,7 @@ const submitLogin = async () => {
     await auth.login(email.value, password.value);
     alert("Login berhasil!");
 
-    router.push("/dashboard"); // redirect
+    router.push("/"); // redirect
   } catch (err) {
     alert(err.message || "Login gagal");
     console.error(err);

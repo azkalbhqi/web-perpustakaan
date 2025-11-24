@@ -1,105 +1,132 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { onMounted, ref, computed } from "vue";
+import { useAuthStore } from "@/stores/authStore";
 import { useBooksStore } from "@/stores/booksStore";
-import { storeToRefs } from "pinia";
 import { useUserBookStore } from "@/stores/userBookStore";
-import { useAuthStore } from "@/stores/authStore";  
+import { useRoute } from "vue-router";
 
-const route = useRoute();
 const auth = useAuthStore();
 const booksStore = useBooksStore();
 const userBookStore = useUserBookStore();
+const route = useRoute();
 
-const { currentBook, loading } = storeToRefs(booksStore);
 
-const borrowedList = ref([]);
+// STATE
+const currentBook = ref(null);
+const loading = ref(true); // <-- Tambahan
+
+// COMPUTED
+const isLoggedIn = computed(() => auth.isLoggedIn);
+
+
+console.log(userBookStore.borrowed);
 
 // FIX: pengecekan pakai some()
 const isBorrowed = (bookId) => {
-  return borrowedList.value.some(item => item.book_id == bookId);
+  return userBookStore.borrowed.some(item => item.book_id == bookId);
 };
 
-// FIX: real borrow
-const borrowBook = async (bookId) => {
-  await userBookStore.borrowBook(bookId, auth.token);
-  await userBookStore.fetchMyBorrowed(auth.token);
-
-  borrowedList.value = userBookStore.borrowed;
-
-  alert("Book borrowed!");
-};
-
+// LOAD BOOK + USER BORROW
 onMounted(async () => {
-  const id = route.params.id;
+  loading.value = true;
 
-  await booksStore.fetchBookById(id);
+  const id = Number(route.params.id);
 
-  const token = auth.token;
-  await userBookStore.fetchMyBorrowed(token);
+  await Promise.all([
+    booksStore.fetchBooks(),
+    userBookStore.fetchMyBorrowed(),
+  ]);
 
-  // FIX: pakai history, bukan borrowed
-  borrowedList.value = userBookStore.borrowed;
+  currentBook.value = booksStore.books.find((b) => b.id === id);
 
-  console.log("borrowedList:", borrowedList.value);
-  console.log("currentBook:", currentBook.value);
-  console.log("loading:", loading.value);
+  loading.value = false;
 });
+
+// BORROW ACTION
+const borrowBook = async (id) => {
+  try {
+    loading.value = true;
+
+    await userBookStore.borrowBook(id);
+    await booksStore.fetchBooks();
+    await userBookStore.fetchMyBorrowed();
+
+    loading.value = false;
+    alert("Borrow Success!");
+  } catch (err) {
+    loading.value = false;
+    console.error(err);
+    alert("Failed to borrow");
+  }
+};
 </script>
 
-
 <template>
-  <div class="px-10 py-10 min-h-screen bg-gray-900">
+  <div class="min-h-screen px-10 py-20 w-full">
 
-    <!-- Loading -->
-    <div v-if="loading" class="text-white text-center text-xl py-10">
-      Loading...
+    <!-- LOADING SCREEN -->
+    <div v-if="loading" class="flex justify-center items-center h-[60vh]">
+      <div class="animate-spin rounded-full h-14 w-14 border-4 border-white border-t-transparent"></div>
     </div>
 
-    <!-- Buku Ditemukan -->
-    <div
-      v-else-if="currentBook"
-      class="bg-white p-8 rounded-2xl shadow-2xl max-w-3xl mx-auto transition-all"
-    >
-      <!-- Title & Author -->
-      <h1 class="text-4xl font-bold mb-3">{{ currentBook.title }}</h1>
-      <p class="text-gray-600 text-lg mb-4">
-        Author: <span class="font-medium">{{ currentBook.author }}</span>
-      </p>
+    <!-- CONTENT -->
+    <div v-else-if="currentBook">
+      <div class="flex justify-between">
+        <h1 class="text-3xl text-white font-bold mb-4">{{ currentBook.title }}</h1>
 
-      <!-- Stock Badge -->
-      <span
-        class="inline-block px-4 py-1 rounded-full text-white text-sm mb-5"
-        :class="currentBook.stock > 0 ? 'bg-green-600' : 'bg-red-600'"
-      >
-        Stock: {{ currentBook.stock }}
-      </span>
+        <div class="flex flex-col">
+          <div class="mb-3">
+            <p class="text-white">Author by</p>
+            <p class="text-white font-semibold text-xl">{{ currentBook.author }}</p>
+          </div>
+          <p class="text-white mb-4">Stock: {{ currentBook.stock }}</p>
+        </div>
+      </div>
 
-      <!-- Borrow Button (conditional) -->
-      <div class="mb-6">
+      <div class="mt-6">
+
+        <!-- 1. Belum login -->
         <button
-          v-if="!isBorrowed(currentBook.id)"
+          v-if="!isLoggedIn"
+          disabled
+          class="bg-gray-400 text-white px-6 py-3 rounded-xl font-semibold shadow-md cursor-not-allowed w-full"
+        >
+          Please Login to Borrow
+        </button>
+
+        <!-- 2. Sudah dipinjam -->
+        <button
+          v-else-if="isBorrowed(currentBook.id)"
+          disabled
+          class="bg-gray-400 text-white px-6 py-3 rounded-xl font-semibold shadow-md cursor-not-allowed w-full"
+        >
+          Borrowed
+        </button>
+
+        <!-- 3. Stok habis -->
+        <button
+          v-else-if="currentBook.stock < 1"
+          disabled
+          class="bg-yellow-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md cursor-not-allowed w-full"
+        >
+          Out of Stock
+        </button>
+
+        <!-- 4. Bisa pinjam -->
+        <button
+          v-else
           @click="borrowBook(currentBook.id)"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition-all"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition-all w-full"
         >
           Borrow
         </button>
 
-        <button
-          v-else
-          class="bg-gray-400 text-white px-6 py-3 rounded-xl font-semibold shadow-md cursor-not-allowed"
-          disabled
-        >
-          Borrowed
-        </button>
       </div>
-
-      
     </div>
 
-    <!-- Buku Tidak Ditemukan -->
-    <div v-else class="text-white text-center text-xl py-10">
-      Buku tidak ditemukan.
+    <!-- NOT FOUND -->
+    <div v-else class="text-white text-center text-xl mt-20">
+      Book not found.
     </div>
 
   </div>

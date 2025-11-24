@@ -43,8 +43,7 @@ export const useUserStore = defineStore("user", () => {
   const logout = async () => {
     try {
       await UserService.logout(auth.token);
-      profile.value = null;
-      auth.token = null;
+      auth.logout();
       return true;
     } catch (err) {
       console.error("Failed to logout:", err);
