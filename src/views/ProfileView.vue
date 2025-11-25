@@ -15,6 +15,11 @@ const editForm = ref({
   email: "",
 });
 
+if (!auth.isLoggedIn) {
+  router.push("/login");
+}
+
+
   
 // === OPEN EDIT PROFILE ===
 const openEditProfile = () => {
@@ -36,7 +41,7 @@ const saveProfile = async () => {
 // === LOGOUT ===
 const logout = async () => {
   if (confirm("Are you sure you want to logout?")) {
-    await authStore.logout();
+    await auth.logout();
   }
 };
 
@@ -52,9 +57,6 @@ const formatDate = (date) => {
   return new Date(date).toLocaleDateString("en-GB");
 };
 
-if (!auth.isLoggedIn) {
-  router.push("/login");
-}
 
 
 onMounted(() => {

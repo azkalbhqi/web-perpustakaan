@@ -48,7 +48,6 @@ export const useUserStore = defineStore("user", () => {
     loadProfile,
     updateProfile,
     deleteAccount,
-    logout,
 
   };
 });

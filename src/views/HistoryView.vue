@@ -2,8 +2,10 @@
 import { onMounted, ref } from "vue";
 import { useUserBookStore } from "@/stores/userBookStore";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
 
 const userBookStore = useUserBookStore();
+const auth = useAuthStore();
 const router = useRouter();
 
 const history = ref([]);

@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { loginRequest, registerRequest } from "@/services/auth";
+import { UserService } from "@/services/users";
+import router from "@/router"; 
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
@@ -55,19 +57,23 @@ export const useAuthStore = defineStore("authStore", {
 
     async logout() {
       try {
-        await UserService.logout(auth.token);
-    
-        auth.logout();
-    
+        // panggil API logout
+        await UserService.logout(this.token);
+
+        // reset state
+        this.token = null;
+        this.user = null;
+
+        // redirect ke login lalu refresh halaman
         router.push({ name: "Login" }).then(() => {
-          window.location.reload(); // refresh halaman
+          window.location.reload();
         });
-    
+
         return true;
       } catch (err) {
         console.error("Failed to logout:", err);
         return false;
       }
-    }
+    },
   },
 });
