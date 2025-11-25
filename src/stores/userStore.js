@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useAuthStore } from "./authStore";
 import { UserService } from "@/services/users";
+import router from "@/router";
 
 export const useUserStore = defineStore("user", () => {
   const auth = useAuthStore();
@@ -44,6 +45,7 @@ export const useUserStore = defineStore("user", () => {
     try {
       await UserService.logout(auth.token);
       auth.logout();
+      router.push({ name: "Login" });
       return true;
     } catch (err) {
       console.error("Failed to logout:", err);
