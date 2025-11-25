@@ -9,6 +9,11 @@ const router = useRouter();
 const history = ref([]);
 const loading = ref(true);
 
+//checker
+if (!auth.isLoggedIn) {
+  router.push("/login");
+}
+
 console.log(history);
 
 onMounted(async () => {

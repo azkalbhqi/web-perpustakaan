@@ -41,18 +41,8 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  const logout = async () => {
-    try {
-      await UserService.logout(auth.token);
-      auth.logout();
-      router.push({ name: "Login" });
-      return true;
-    } catch (err) {
-      console.error("Failed to logout:", err);
-      return false;
-    }
-  };
-
+  
+  
   return {
     profile,
     loadProfile,

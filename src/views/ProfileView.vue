@@ -36,7 +36,7 @@ const saveProfile = async () => {
 // === LOGOUT ===
 const logout = async () => {
   if (confirm("Are you sure you want to logout?")) {
-    await userStore.logout();
+    await authStore.logout();
   }
 };
 

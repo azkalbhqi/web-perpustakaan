@@ -53,9 +53,21 @@ export const useAuthStore = defineStore("authStore", {
       }
     },
 
-    logout() {
-      this.token = null;
-      this.user = null;
-    },
+    async logout() {
+      try {
+        await UserService.logout(auth.token);
+    
+        auth.logout();
+    
+        router.push({ name: "Login" }).then(() => {
+          window.location.reload(); // refresh halaman
+        });
+    
+        return true;
+      } catch (err) {
+        console.error("Failed to logout:", err);
+        return false;
+      }
+    }
   },
 });
