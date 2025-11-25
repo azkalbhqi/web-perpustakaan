@@ -77,7 +77,7 @@ onMounted(() => {
       <h1 class="text-3xl font-bold text-white text-center mb-6">My Profile</h1>
 
       <!-- Content Layout -->
-      <div class="flex gap-10 justify-around">
+      <div class="flex gap-10 justify-around sm:flex-row flex-col items-center">
         <!-- Profile Card -->
         <div class="border w-full border-white/20 rounded-2xl p-6 shadow-xl text-white">
           <h2 class="text-2xl font-semibold mb-4">{{ userStore.profile?.name }}</h2>

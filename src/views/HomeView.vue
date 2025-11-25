@@ -52,13 +52,7 @@ onMounted(async () => {
     </div>
 
     <!-- Summary Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <!-- Total Buku -->
-      <div class="p-6 bg-white shadow rounded-xl border border-gray-200">
-        <p class="text-gray-500">Total Buku</p>
-        <h2 class="text-4xl font-bold text-indigo-600">{{ totalBooks }}</h2>
-      </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
 
       <!-- History Count -->
       <div class="p-6 bg-white shadow rounded-xl border border-gray-200">
