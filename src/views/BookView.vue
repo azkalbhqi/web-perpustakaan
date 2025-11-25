@@ -23,7 +23,7 @@ console.log(userBookStore.borrowed);
 
 // FIX: pengecekan pakai some()
 const isBorrowed = (bookId) => {
-  return userBookStore.borrowed.some(item => item.book_id == bookId);
+  return userBookStore.borrowed?.some(item => item.book_id == bookId);
 };
 
 // LOAD BOOK + USER BORROW

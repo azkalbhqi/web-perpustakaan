@@ -41,7 +41,7 @@ onMounted(async () => {
 
       <!-- Jika tidak ada overdue -->
       <div
-        v-if="!overdue || overdue.length === 0"
+        v-if="!overdue || overdue?.length === 0"
         class="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-6 rounded-xl shadow-lg border border-gray-600"
       >
         <p class="text-center text-lg">Tidak ada buku yang overdue 🎉</p>
