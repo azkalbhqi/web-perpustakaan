@@ -37,14 +37,14 @@ onMounted(async () => {
 <template>
   <div>
     <div class="p-10">
-      <h1 class="text-3xl text-white font-bold mb-6">📚 Overdue Books</h1>
+      <h1 class="text-3xl text-white font-bold mb-6">Overdue Books</h1>
 
       <!-- Jika tidak ada overdue -->
       <div
         v-if="!overdue || overdue.length === 0"
         class="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-6 rounded-xl shadow-lg border border-gray-600"
       >
-        <p class="text-center text-lg">Tidak ada buku yang overdue 🎉</p>
+        <p class="text-center text-lg">Tidak ada buku yang overdue</p>
       </div>
 
       <!-- List Overdue -->

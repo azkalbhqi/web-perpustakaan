@@ -27,7 +27,7 @@ const openDetail = (id) => {
     <div class="bg-white shadow border border-gray-200 rounded-xl p-4">
 
       <p
-        v-if="borrowed.length === 0"
+        v-if="borrowed?.length === 0"
         class="text-center text-gray-500 py-6"
       >
         Belum ada riwayat peminjaman.

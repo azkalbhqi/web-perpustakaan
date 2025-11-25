@@ -24,7 +24,7 @@ export const useUserBookStore = defineStore("userBookStore", () => {
       const res = await UserBookService.borrowBook(auth.token, payload);
 
       // Refresh list setelah berhasil
-      await fetchUserBooks();
+      await fetchMyBorrowed();
       await fetchBorrowHistory();
 
       return {
@@ -83,7 +83,7 @@ export const useUserBookStore = defineStore("userBookStore", () => {
     error.value = null;
     try {
       const res = await UserBookService.myBorrowed(auth.token);
-      borrowed.value = res.data.book;
+      borrowed.value = res.data;
     } catch (err) {
       error.value = "Failed to load my borrowed books";
       console.error(err);

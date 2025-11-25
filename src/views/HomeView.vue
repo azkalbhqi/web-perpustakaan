@@ -36,7 +36,8 @@ onMounted(async () => {
   borrowed.value = userBookStore.borrowed;
 
   // Hitung overdue
-  overdue.value = history.value.filter(item => item.is_overdue);
+  await userBookStore.fetchOverdue(token);
+  overdue.value = userBookStore.overdue;
 });
 </script>
 
@@ -76,7 +77,7 @@ onMounted(async () => {
       <div class="bg-red-100 border-l-4 border-red-500 p-4 rounded">
         <h3 class="text-red-700 font-bold">⚠️ Perhatian!</h3>
         <p class="text-red-700">
-          Kamu memiliki <span class="font-bold">{{ overdue.length }}</span> buku yang terlambat dikembalikan.
+          Kamu memiliki <span class="font-bold">{{ overdue?.length }}</span> buku yang terlambat dikembalikan.
         </p>
       </div>
     </div>
