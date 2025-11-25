@@ -3,8 +3,8 @@ import { loginRequest, registerRequest } from "@/services/auth";
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
-    token: localStorage.getItem("access_token") || null,
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    token: null,
+    user: null,
   }),
 
   getters: {
@@ -18,9 +18,6 @@ export const useAuthStore = defineStore("authStore", {
 
         this.token = res.data.access_token;
         this.user = res.data.user;
-
-        localStorage.setItem("access_token", res.data.access_token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
 
         return { success: true };
       } catch (error) {
@@ -59,9 +56,6 @@ export const useAuthStore = defineStore("authStore", {
     logout() {
       this.token = null;
       this.user = null;
-
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("user");
     },
   },
 });
