@@ -64,10 +64,8 @@ export const useAuthStore = defineStore("authStore", {
         this.token = null;
         this.user = null;
 
-        // redirect ke login lalu refresh halaman
-        router.push({ name: "Login" }).then(() => {
           window.location.reload();
-        });
+      
 
         return true;
       } catch (err) {
