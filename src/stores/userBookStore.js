@@ -14,40 +14,38 @@ export const useUserBookStore = defineStore("userBookStore", () => {
   const error = ref(null);
   const borrowed = ref([]);
 
-
   // === BORROW A BOOK ===
   const borrowBook = async (bookId) => {
     try {
       const payload = {
-        "book_id": bookId,  
+        book_id: bookId,
       };
-  
+
       const res = await UserBookService.borrowBook(auth.token, payload);
-  
+
       // Refresh list setelah berhasil
       await fetchUserBooks();
       await fetchBorrowHistory();
-  
+
       return {
         success: true,
         data: res.data,
       };
     } catch (err) {
       console.error("Borrow failed:", err);
-  
+
       return {
         success: false,
         message: err.response?.data?.message || "Failed to borrow book",
       };
     }
   };
-  
 
   // === RETURN BOOK ===
   const returnBook = async (borrow_id) => {
     try {
       const payload = {
-        "borrowing_id": borrow_id,
+        borrowing_id: borrow_id,
       };
       const res = await UserBookService.returnBook(auth.token, payload);
       await fetchUserBooks();
@@ -56,7 +54,10 @@ export const useUserBookStore = defineStore("userBookStore", () => {
       return { success: true };
     } catch (err) {
       console.error("Return failed:", err);
-      return { success: false, message: err.response?.data?.message || "Failed to return book" };
+      return {
+        success: false,
+        message: err.response?.data?.message || "Failed to return book",
+      };
     }
   };
 
@@ -82,8 +83,7 @@ export const useUserBookStore = defineStore("userBookStore", () => {
     error.value = null;
     try {
       const res = await UserBookService.myBorrowed(auth.token);
-      borrowed.value = res.data;
-      // console.log(res.data);
+      borrowed.value = res.data.book;
     } catch (err) {
       error.value = "Failed to load my borrowed books";
       console.error(err);
@@ -92,7 +92,6 @@ export const useUserBookStore = defineStore("userBookStore", () => {
     }
   };
 
-  // === OVERDUE BOOKS ===
   const fetchOverdue = async () => {
     loading.value = true;
     error.value = null;
