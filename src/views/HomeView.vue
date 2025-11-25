@@ -57,13 +57,13 @@ onMounted(async () => {
       <!-- History Count -->
       <div class="p-6 bg-white shadow rounded-xl border border-gray-200">
         <p class="text-gray-500">Total Riwayat Peminjaman</p>
-        <h2 class="text-4xl font-bold text-blue-600">{{ borrowed.length }}</h2>
+        <h2 class="text-4xl font-bold text-blue-600">{{ borrowed?.length || 0 }}</h2>
       </div>
 
       <!-- Overdue Count -->
       <div class="p-6 bg-white shadow rounded-xl border border-gray-200">
         <p class="text-gray-500">Buku Terlambat Dikembalikan</p>
-        <h2 class="text-4xl font-bold text-red-600">{{ overdue.length }}</h2>
+        <h2 class="text-4xl font-bold text-red-600">{{ overdue?.length }}</h2>
       </div>
 
     </div>
