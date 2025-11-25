@@ -10,7 +10,6 @@ const booksStore = useBooksStore();
 const userBookStore = useUserBookStore();
 const route = useRoute();
 
-
 // STATE
 const currentBook = ref(null);
 const loading = ref(true); // <-- Tambahan
@@ -18,12 +17,11 @@ const loading = ref(true); // <-- Tambahan
 // COMPUTED
 const isLoggedIn = computed(() => auth.isLoggedIn);
 
-
 console.log(userBookStore.borrowed);
 
 // FIX: pengecekan pakai some()
 const isBorrowed = (bookId) => {
-  return userBookStore.borrowed.some(item => item.book_id == bookId);
+  return userBookStore.borrowed.some((item) => item.book_id == bookId);
 };
 
 // LOAD BOOK + USER BORROW
@@ -32,10 +30,7 @@ onMounted(async () => {
 
   const id = Number(route.params.id);
 
-  await Promise.all([
-    booksStore.fetchBooks(),
-    userBookStore.fetchMyBorrowed(),
-  ]);
+  await Promise.all([booksStore.fetchBooks(), userBookStore.fetchMyBorrowed()]);
 
   currentBook.value = booksStore.books.find((b) => b.id === id);
 
@@ -63,28 +58,32 @@ const borrowBook = async (id) => {
 
 <template>
   <div class="min-h-screen px-10 py-20 w-full">
-
     <!-- LOADING SCREEN -->
     <div v-if="loading" class="flex justify-center items-center h-[60vh]">
-      <div class="animate-spin rounded-full h-14 w-14 border-4 border-white border-t-transparent"></div>
+      <div
+        class="animate-spin rounded-full h-14 w-14 border-4 border-white border-t-transparent"
+      ></div>
     </div>
 
     <!-- CONTENT -->
     <div v-else-if="currentBook">
       <div class="flex justify-between">
-        <h1 class="text-3xl text-white font-bold mb-4">{{ currentBook.title }}</h1>
+        <h1 class="text-3xl text-white font-bold mb-4">
+          {{ currentBook.title }}
+        </h1>
 
         <div class="flex flex-col">
           <div class="mb-3">
             <p class="text-white">Author by</p>
-            <p class="text-white font-semibold text-xl">{{ currentBook.author }}</p>
+            <p class="text-white font-semibold text-xl">
+              {{ currentBook.author }}
+            </p>
           </div>
           <p class="text-white mb-4">Stock: {{ currentBook.stock }}</p>
         </div>
       </div>
 
       <div class="mt-6">
-
         <!-- 1. Belum login -->
         <button
           v-if="!isLoggedIn"
@@ -120,7 +119,6 @@ const borrowBook = async (id) => {
         >
           Borrow
         </button>
-
       </div>
     </div>
 
@@ -128,6 +126,5 @@ const borrowBook = async (id) => {
     <div v-else class="text-white text-center text-xl mt-20">
       Book not found.
     </div>
-
   </div>
 </template>
