@@ -7,39 +7,16 @@ import { getBooksRequest } from "@/services/books";
 export const useAdminStore = defineStore("adminStore", () => {
   const auth = useAuthStore();
 
-  const stats = ref({
-    totalUsers: 0,
-    totalBooks: 0,
-    totalBorrowed: 0,
-    totalOverdue: 0,
-  });
-
   const users = ref([]);
   const count = ref(0);
   const totalBooks = ref(0);
-  const borrowings = ref([]);
-  const overdueBooks = ref([]);
+  const totalBorrowed = ref(0);
+  const totalOverdue = ref(0);
   const selectedUser = ref(null);
   const userBorrowings = ref([]);
 
   const loading = ref(false);
   const error = ref(null);
-
-  // Fetch Dashboard Stats
-  const fetchDashboardStats = async () => {
-    loading.value = true;
-    error.value = null;
-
-    try {
-      const res = await AdminService.getDashboardStats(auth.token);
-      stats.value = res.data.data;
-    } catch (err) {
-      error.value = "Failed to load dashboard stats";
-      console.error(err);
-    } finally {
-      loading.value = false;
-    }
-  };
 
   // Fetch All Users
   const fetchAllUsers = async () => {
@@ -155,7 +132,7 @@ export const useAdminStore = defineStore("adminStore", () => {
 
     try {
       const res = await AdminService.getAllBorrowings(auth.token);
-      borrowings.value = res.data;
+      totalBorrowed.value = res.data.count;
     } catch (err) {
       error.value = "Failed to load borrowings";
       console.error(err);
@@ -185,7 +162,7 @@ export const useAdminStore = defineStore("adminStore", () => {
 
     try {
       const res = await AdminService.getAllOverdue(auth.token);
-      overdueBooks.value = res.data;
+      totalOverdue.value = res.data.count;
     } catch (err) {
       error.value = "Failed to load overdue books";
       console.error(err);
@@ -195,17 +172,16 @@ export const useAdminStore = defineStore("adminStore", () => {
   };
 
   return {
-    stats,
+    // HAPUS 'stats' karena tidak didefinisikan
     users,
     count,
-    borrowings,
-    overdueBooks,
+    totalBooks, // <-- Ini yang dipakai
+    totalBorrowed, // <-- Ini yang dipakai
+    totalOverdue, // <-- Ini yang dipakai
     selectedUser,
     userBorrowings,
     loading,
     error,
-    totalBooks,
-    fetchDashboardStats,
     fetchAllUsers,
     getUserById,
     createUser,

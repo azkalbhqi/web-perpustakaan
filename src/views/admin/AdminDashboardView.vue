@@ -19,12 +19,13 @@ onMounted(async () => {
     adminStore.fetchTotalBooks(),
     adminStore.fetchAllBorrowings(),
     adminStore.fetchAllOverdue(),
-    adminStore.fetchDashboardStats(),
   ]);
 });
 
 const totalUsers = computed(() => adminStore.count);
 const totalBooks = computed(() => adminStore.totalBooks);
+const totalBorrowed = computed(() => adminStore.totalBorrowed);
+const totalOverdue = computed(() => adminStore.totalOverdue);
 const stats = computed(() => adminStore.stats);
 const loading = computed(() => adminStore.loading);
 </script>
@@ -112,7 +113,7 @@ const loading = computed(() => adminStore.loading);
           <div>
             <p class="text-yellow-100 text-sm font-medium">Total Borrowed</p>
             <h2 class="text-4xl font-bold text-white mt-2">
-              {{ stats.totalBorrowed || 0 }}
+              {{ totalBorrowed || 0 }}
             </h2>
           </div>
           <div class="bg-white/20 p-4 rounded-full">
@@ -141,7 +142,7 @@ const loading = computed(() => adminStore.loading);
           <div>
             <p class="text-red-100 text-sm font-medium">Total Overdue</p>
             <h2 class="text-4xl font-bold text-white mt-2">
-              {{ stats.totalOverdue || 0 }}
+              {{ totalOverdue || 0 }}
             </h2>
           </div>
           <div class="bg-white/20 p-4 rounded-full">

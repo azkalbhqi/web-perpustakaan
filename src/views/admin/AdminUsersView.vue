@@ -2,19 +2,12 @@
 import { onMounted, computed, ref } from "vue";
 import { useAdminStore } from "@/stores/adminStore";
 import { useAuthStore } from "@/stores/authStore";
-import { useRouter } from "vue-router";
 
 const adminStore = useAdminStore();
 const auth = useAuthStore();
-const router = useRouter();
-
-// Check if user is admin
-// if (!auth.isLoggedIn || auth.user?.role !== "admin") {
-//   router.push("/login");
-// }
 
 // STATE
-const searchId = ref("");
+const searchQuery = ref(""); // <-- UBAH: search berdasarkan nama
 const showAddModal = ref(false);
 const showEditModal = ref(false);
 const showBorrowingsModal = ref(false);
@@ -32,20 +25,26 @@ const users = computed(() => adminStore.users);
 const loading = computed(() => adminStore.loading);
 const userBorrowings = computed(() => adminStore.userBorrowings);
 
-// SEARCH USER BY ID
-const searchUserById = async () => {
-  if (!searchId.value) {
-    alert("Masukkan ID user");
-    return;
+// COMPUTED: Filter users berdasarkan search query
+const filteredUsers = computed(() => {
+  if (!searchQuery.value.trim()) {
+    return users.value;
   }
 
-  try {
-    const user = await adminStore.getUserById(searchId.value);
-    alert(`User ditemukan: ${user.name} (${user.email})`);
-  } catch (err) {
-    console.error("Error:", err);
-    alert("User tidak ditemukan");
-  }
+  const query = searchQuery.value.toLowerCase();
+
+  return users.value.filter((user) => {
+    return (
+      user.name.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query) ||
+      user.role.toLowerCase().includes(query)
+    );
+  });
+});
+
+// RESET SEARCH
+const resetSearch = () => {
+  searchQuery.value = "";
 };
 
 // OPEN ADD MODAL
@@ -87,7 +86,7 @@ const updateUser = async () => {
   try {
     const dataToUpdate = { ...formData.value };
     if (!dataToUpdate.password) {
-      delete dataToUpdate.password; // Jangan kirim password jika kosong
+      delete dataToUpdate.password;
     }
 
     await adminStore.updateUser(selectedUserId.value, dataToUpdate);
@@ -117,7 +116,7 @@ const viewBorrowings = async (userId, userName) => {
     showBorrowingsModal.value = true;
     selectedUserId.value = userId;
   } catch (err) {
-    console.error("Error:", err);
+    console.error(err);
     alert("Gagal memuat data peminjaman");
   }
 };
@@ -142,19 +141,22 @@ onMounted(async () => {
     </div>
 
     <!-- Search Bar -->
-    <div class="mb-6 flex gap-3">
-      <input
-        v-model="searchId"
-        type="number"
-        placeholder="Cari user berdasarkan ID..."
-        class="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
-      />
-      <button
-        @click="searchUserById"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
-      >
-        Cari
-      </button>
+    <div class="mb-6 bg-white p-4 rounded-xl shadow">
+      <div class="flex gap-3">
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Cari user berdasarkan nama, email, atau role..."
+          class="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+          @keyup.enter="searchUsers"
+        />
+        <button
+          @click="resetSearch"
+          class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition"
+        >
+          Reset
+        </button>
+      </div>
     </div>
 
     <!-- Loading -->
@@ -180,7 +182,7 @@ onMounted(async () => {
 
           <tbody>
             <tr
-              v-for="user in users"
+              v-for="user in filteredUsers"
               :key="user.id"
               class="border-b last:border-0 hover:bg-gray-50 transition"
             >
@@ -229,14 +231,19 @@ onMounted(async () => {
         </table>
 
         <p
-          v-if="!users || users.length === 0"
+          v-if="!filteredUsers || filteredUsers.length === 0"
           class="text-center text-gray-500 py-8"
         >
-          Tidak ada data user.
+          {{
+            searchQuery
+              ? "Tidak ada user yang sesuai dengan pencarian"
+              : "Tidak ada data user"
+          }}
         </p>
       </div>
     </div>
 
+    <!-- Modals tetap sama seperti sebelumnya -->
     <!-- ADD USER MODAL -->
     <div
       v-if="showAddModal"

@@ -7,8 +7,8 @@ const booksStore = useBooksStore();
 const auth = useAuthStore();
 
 // STATE
-const searchQuery = ref(""); // <-- UBAH: Hanya 1 search query
-const searchType = ref("all"); // <-- TAMBAH: Filter type
+const searchQuery = ref("");
+const searchType = ref("all");
 const showAddModal = ref(false);
 const showEditModal = ref(false);
 const selectedBook = ref(null);
@@ -48,6 +48,7 @@ const searchBooks = async () => {
 
     await booksStore.searchBooks(params);
   } catch (err) {
+    console.error(err);
     alert("Buku tidak ditemukan");
   }
 };
@@ -251,7 +252,7 @@ onMounted(async () => {
 
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium mb-1">Judul</label>
+            <label for="" class="block text-sm font-medium mb-1">Judul</label>
             <input
               v-model="formData.title"
               type="text"
@@ -261,7 +262,7 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Author</label>
+            <label for="" class="block text-sm font-medium mb-1">Author</label>
             <input
               v-model="formData.author"
               type="text"
@@ -271,7 +272,7 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Kategori</label>
+            <label for="" class="block text-sm font-medium mb-1">Kategori</label>
             <input
               v-model="formData.category"
               type="text"
@@ -281,7 +282,7 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Stock</label>
+            <label for="" class="block text-sm font-medium mb-1">Stock</label>
             <input
               v-model.number="formData.stock"
               type="number"
@@ -319,7 +320,7 @@ onMounted(async () => {
 
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium mb-1">Judul</label>
+            <label for="" class="block text-sm font-medium mb-1">Judul</label>
             <input
               v-model="formData.title"
               type="text"
@@ -328,7 +329,7 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Author</label>
+            <label for="" class="block text-sm font-medium mb-1">Author</label>
             <input
               v-model="formData.author"
               type="text"
@@ -337,7 +338,7 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Kategori</label>
+            <label for="" class="block text-sm font-medium mb-1">Kategori</label>
             <input
               v-model="formData.category"
               type="text"
@@ -346,7 +347,7 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Stock</label>
+            <label for="" class="block text-sm font-medium mb-1">Stock</label>
             <input
               v-model.number="formData.stock"
               type="number"
