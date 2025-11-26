@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { loginRequest, registerRequest } from "@/services/auth";
 import { UserService } from "@/services/users";
-import router from "@/router"; 
+import router from "@/router";
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("authStore", {
 
   getters: {
     isLoggedIn: (state) => !!state.token,
+    isAdmin: (state) => state.user?.role === "admin",
   },
 
   actions: {
@@ -21,7 +22,19 @@ export const useAuthStore = defineStore("authStore", {
         this.token = res.data.access_token;
         this.user = res.data.user;
 
-        return { success: true };
+        console.log("Login berhasil, user:", this.user);
+
+        // Auto redirect berdasarkan role
+        if (this.user.role === "admin") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/");
+        }
+
+        return {
+          success: true,
+          isAdmin: this.user.role === "admin",
+        };
       } catch (error) {
         const err = error.response?.data;
         throw {
@@ -60,16 +73,30 @@ export const useAuthStore = defineStore("authStore", {
         // panggil API logout
         await UserService.logout(this.token);
 
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user");
+
         // reset state
         this.token = null;
         this.user = null;
 
-          window.location.reload();
-      
+        window.location.reload();
+
+        this.$reset();
 
         return true;
       } catch (err) {
         console.error("Failed to logout:", err);
+
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user");
+
+        this.token = null;
+        this.user = null;
+        router.push("/login");
+
+        this.$reset();
+
         return false;
       }
     },

@@ -6,7 +6,7 @@ import { useUserBookStore } from "@/stores/userBookStore";
 import BorrowedTable from "@/components/BorrowedTable.vue";
 import { useRouter } from "vue-router";
 
-const router = useRouter();
+// const router = useRouter();
 
 const auth = useAuthStore();
 const booksStore = useBooksStore();
@@ -43,7 +43,6 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen w-full py-24 px-8 items-center">
-
     <!-- Greeting -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-white">
@@ -54,11 +53,12 @@ onMounted(async () => {
 
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-
       <!-- History Count -->
       <div class="p-6 bg-white shadow rounded-xl border border-gray-200">
         <p class="text-gray-500">Total Riwayat Peminjaman</p>
-        <h2 class="text-4xl font-bold text-blue-600">{{ borrowed?.length || 0 }}</h2>
+        <h2 class="text-4xl font-bold text-blue-600">
+          {{ borrowed?.length || 0 }}
+        </h2>
       </div>
 
       <!-- Overdue Count -->
@@ -66,7 +66,6 @@ onMounted(async () => {
         <p class="text-gray-500">Buku Terlambat Dikembalikan</p>
         <h2 class="text-4xl font-bold text-red-600">{{ overdue?.length }}</h2>
       </div>
-
     </div>
 
     <!-- History Section -->
@@ -77,10 +76,11 @@ onMounted(async () => {
       <div class="bg-red-100 border-l-4 border-red-500 p-4 rounded">
         <h3 class="text-red-700 font-bold">⚠️ Perhatian!</h3>
         <p class="text-red-700">
-          Kamu memiliki <span class="font-bold">{{ overdue?.length }}</span> buku yang terlambat dikembalikan.
+          Kamu memiliki
+          <span class="font-bold">{{ overdue?.length }}</span> buku yang
+          terlambat dikembalikan.
         </p>
       </div>
     </div>
-
   </div>
 </template>

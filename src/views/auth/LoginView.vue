@@ -1,8 +1,7 @@
 <script setup>
-import { RouterLink, useRouter } from 'vue-router';
-import { ref } from 'vue';
-import { useAuthStore } from '@/stores/authStore';
-
+import { RouterLink, useRouter } from "vue-router";
+import { ref } from "vue";
+import { useAuthStore } from "@/stores/authStore";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -11,16 +10,20 @@ const auth = useAuthStore();
 const email = ref("");
 const password = ref("");
 
+// Redirect jika sudah login
 if (auth.isLoggedIn) {
-  router.push("/profile");
+  if (auth.isAdmin) {
+    router.push("/admin/dashboard");
+  } else {
+    router.push("/");
+  }
 }
+
 // submit login
 const submitLogin = async () => {
   try {
     await auth.login(email.value, password.value);
     alert("Login berhasil!");
-
-    router.push("/"); // redirect
   } catch (err) {
     alert(err.message || "Login gagal");
     console.error(err);
@@ -33,7 +36,9 @@ const submitLogin = async () => {
     <div
       class="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition duration-500 hover:scale-[1.02]"
     >
-      <h1 class="text-3xl font-bold text-white text-center tracking-wide drop-shadow-md">
+      <h1
+        class="text-3xl font-bold text-white text-center tracking-wide drop-shadow-md"
+      >
         Perpustakaan Digital
       </h1>
       <p class="text-gray-200 text-center mt-2 text-sm">
@@ -41,7 +46,6 @@ const submitLogin = async () => {
       </p>
 
       <form @submit.prevent="submitLogin" class="flex flex-col gap-4 mt-8">
-
         <input
           v-model="email"
           type="email"
