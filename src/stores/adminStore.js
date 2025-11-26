@@ -114,7 +114,7 @@ export const useAdminStore = defineStore("adminStore", () => {
 
     try {
       const res = await AdminService.getUserBorrowings(auth.token, userId);
-      userBorrowings.value = res.data;
+      userBorrowings.value = res.data.data; // Ambil array data
       return res.data;
     } catch (err) {
       error.value = "Failed to load user borrowings";

@@ -33,7 +33,7 @@ export const AdminService = {
   },
 
   async getUserBorrowings(token, userId) {
-    return axios.get(`${API_URL}/users/${userId}/borrowings`, {
+    return axios.get(`${API_URL}/borrow/users/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },

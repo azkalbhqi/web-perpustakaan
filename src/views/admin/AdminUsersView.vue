@@ -112,7 +112,8 @@ const deleteUser = async (id, name) => {
 // VIEW USER BORROWINGS
 const viewBorrowings = async (userId, userName) => {
   try {
-    await adminStore.fetchUserBorrowings(userId);
+    const result = await adminStore.fetchUserBorrowings(userId);
+    console.log("User borrowings:", result); // Debug
     showBorrowingsModal.value = true;
     selectedUserId.value = userId;
   } catch (err) {
@@ -421,6 +422,9 @@ onMounted(async () => {
               Pinjam: {{ borrowing.borrow_date }}
             </p>
             <p class="text-sm text-gray-600">Due: {{ borrowing.due_date }}</p>
+            <p v-if="borrowing.return_date" class="text-sm text-gray-600">
+              Dikembalikan: {{ borrowing.return_date }}
+            </p>
             <span
               :class="[
                 'px-2 py-1 rounded text-xs inline-block mt-2',
