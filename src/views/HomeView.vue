@@ -4,9 +4,6 @@ import { useAuthStore } from "@/stores/authStore";
 import { useBooksStore } from "@/stores/booksStore";
 import { useUserBookStore } from "@/stores/userBookStore";
 import BorrowedTable from "@/components/BorrowedTable.vue";
-import { useRouter } from "vue-router";
-
-// const router = useRouter();
 
 const auth = useAuthStore();
 const booksStore = useBooksStore();

@@ -28,8 +28,6 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  
-
   const deleteAccount = async () => {
     try {
       await UserService.deleteAccount(auth.token);
@@ -41,13 +39,10 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  
-  
   return {
     profile,
     loadProfile,
     updateProfile,
     deleteAccount,
-
   };
 });

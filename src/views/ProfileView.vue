@@ -19,8 +19,6 @@ if (!auth.isLoggedIn) {
   router.push("/login");
 }
 
-
-  
 // === OPEN EDIT PROFILE ===
 const openEditProfile = () => {
   editForm.value.name = userStore.profile?.name || "";
@@ -57,19 +55,15 @@ const formatDate = (date) => {
   return new Date(date).toLocaleDateString("en-GB");
 };
 
-
-
 onMounted(() => {
   userStore.loadProfile();
 });
 </script>
 
-
-
-
 <template>
-
-  <div class="min-h-screen bg-linear-to-br flex items-center justify-center p-6">
+  <div
+    class="min-h-screen bg-linear-to-br flex items-center justify-center p-6"
+  >
     <div
       class="w-full max-w-xl bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl"
     >
@@ -79,25 +73,32 @@ onMounted(() => {
       <!-- Content Layout -->
       <div class="flex gap-10 justify-around sm:flex-row flex-col items-center">
         <!-- Profile Card -->
-        <div class="border w-full border-white/20 rounded-2xl p-6 shadow-xl text-white">
-          <h2 class="text-2xl font-semibold mb-4">{{ userStore.profile?.name }}</h2>
+        <div
+          class="border w-full border-white/20 rounded-2xl p-6 shadow-xl text-white"
+        >
+          <h2 class="text-2xl font-semibold mb-4">
+            {{ userStore.profile?.name }}
+          </h2>
           <div class="space-y-2 text-gray-200">
             <div>
               <p class="font-medium">{{ userStore.profile?.email }}</p>
             </div>
 
             <div class="flex justify-between">
-                <div>
+              <div>
                 <span class="text-gray-400 text-sm">Role</span>
-                <p class="capitalize font-medium">{{ userStore.profile?.role }}</p>
+                <p class="capitalize font-medium">
+                  {{ userStore.profile?.role }}
+                </p>
               </div>
 
               <div>
                 <span class="text-gray-400 text-sm">Joined</span>
-                <p class="font-medium">{{ formatDate(userStore.profile?.created_at) }}</p>
+                <p class="font-medium">
+                  {{ formatDate(userStore.profile?.created_at) }}
+                </p>
               </div>
             </div>
-            
           </div>
         </div>
 
@@ -137,35 +138,31 @@ onMounted(() => {
       >
         <h2 class="text-2xl font-bold text-center mb-5">Edit Profile</h2>
 
-        <label class="block text-gray-300 mb-1">Name</label>
+        <label for="name" class="block text-gray-300 mb-1">Name</label>
         <input
           v-model="editForm.name"
           type="text"
-          class="w-full p-3 rounded-xl bg-white/20 border border-white/30 placeholder-gray-300
-                 focus:ring-2 focus:ring-blue-400 outline-none mb-4"
+          class="w-full p-3 rounded-xl bg-white/20 border border-white/30 placeholder-gray-300 focus:ring-2 focus:ring-blue-400 outline-none mb-4"
         />
 
-        <label class="block text-gray-300 mb-1">Email</label>
+        <label for="email" class="block text-gray-300 mb-1">Email</label>
         <input
           v-model="editForm.email"
           type="email"
-          class="w-full p-3 rounded-xl bg-white/20 border border-white/30 placeholder-gray-300
-                 focus:ring-2 focus:ring-blue-400 outline-none mb-4"
+          class="w-full p-3 rounded-xl bg-white/20 border border-white/30 placeholder-gray-300 focus:ring-2 focus:ring-blue-400 outline-none mb-4"
         />
 
         <div class="flex justify-end gap-3 mt-4">
           <button
             @click="showEdit = false"
-            class="px-4 py-2 rounded-xl bg-gray-400/20 hover:bg-gray-400/30
-                   border border-white/20 transition"
+            class="px-4 py-2 rounded-xl bg-gray-400/20 hover:bg-gray-400/30 border border-white/20 transition"
           >
             Cancel
           </button>
 
           <button
             @click="saveProfile"
-            class="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700
-                   active:bg-green-800 transition shadow-md"
+            class="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 active:bg-green-800 transition shadow-md"
           >
             Save
           </button>
@@ -174,5 +171,3 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
-
