@@ -10,6 +10,7 @@ import BorrowedDetailView from "@/views/BorrowedDetailView.vue";
 import HistoryView from "@/views/HistoryView.vue";
 import AdminDashboardView from "@/views/admin/AdminDashboardView.vue";
 import AdminUsersView from "@/views/admin/AdminUsersView.vue";
+import AdminBooksView from "@/views/admin/AdminBooksView.vue";
 
 import {
   requireAuth,
@@ -78,6 +79,12 @@ const router = createRouter({
       path: "/admin/users",
       name: "AdminUsers",
       component: AdminUsersView,
+      beforeEnter: requireAdmin,
+    },
+    {
+      path: "/admin/books",
+      name: "AdminBooks",
+      component: AdminBooksView,
       beforeEnter: requireAdmin,
     },
 
